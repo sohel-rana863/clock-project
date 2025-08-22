@@ -1,0 +1,173 @@
+ <!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> Clock </title>
+  <style>
+    
+    *{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* ===============  PAGE BACKDROP  =============== */
+body{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  background:radial-gradient(circle,#0b456b,#021c37);
+}
+
+/* ===============  CLOCK CONTAINER  =============== */
+.clock{
+  width:400px;              /* সমান width/height → নিখুঁত বৃত্ত   */
+  height:400px;
+  position:relative;
+  border-radius:50%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:radial-gradient(circle,#05263c,#000d1a);
+  border: 8px solid #00d9ff;      /* উজ্জ্বল নীল রিং */
+  box-shadow: 0 0 12px #ee00ff;   /* গোলাপি গ্লো, ঐচ্ছিক */
+}
+
+/* ভিতরের রঙিন রিং */
+.clock::before{
+  content:"";
+  position:absolute;
+  width:90%;               /* parent-এর % ব্যবহার করলে স্কেল-ফ্রেন্ডলি */
+  height:90%;
+  border-radius:50%;
+  background:linear-gradient(to right,#00d9ff,#ee00ff);
+  box-shadow:0 0 15px 15px rgba(0,0,0,.2);
+  z-index:-1;              /* পেছনে পাঠানো */
+}
+
+/* ===============  NUMERALS  =============== */
+.number{
+  position:absolute;
+  inset:20px;              /* সব দিকে 20px ফাঁক রেখে */
+  text-align:center;
+  font-size:40px;
+  color:#00d9ff;
+  text-shadow:0 0 12px #ee00ff;
+  transform:rotate(calc(30deg * var(--n)));      /* নিজ নিজ কোণে ঘোরানো */
+}
+.number b{
+  display:inline-block;
+  transform:rotate(calc(-30deg * var(--n)));     /* লেখা সোজা */
+}
+
+/* ===============  CENTER DOT  =============== */
+.center-dot{
+  position:absolute;
+  width:25px;
+  height:25px;
+  background:#ee00ff;
+  border:6px solid #00d9ff;
+  border-radius:50%;
+  z-index:20;
+}
+
+/* ===============  HANDS  =============== */
+.hour-hand,
+.minute-hand,
+.second-hand{
+  /* ডায়নামিক রোটেশন ভেরিয়েবল */
+  --rotate:0;
+
+  position:absolute;
+  left:50%;
+  top:50%;                                  /* ঠিক কেন্দ্রে */
+  transform:translate(-50%,-100%)
+            rotate(calc(var(--rotate)*1deg));
+  transform-origin:50% 100%;                 /* নীচের মাথা ঘোরে */
+  border-radius:30px 30px 0 0;
+  z-index:15;
+
+}
+
+/* পৃথক স্টাইল */
+.hour-hand{
+  width:12px;
+  height:130px;
+  background:linear-gradient(#00d9ff,#ee00ff);
+}
+.minute-hand{
+  width:12px;
+  height:190px;
+  background:linear-gradient(to top,#00d9ff,#ee00ff);
+}
+.second-hand{
+  width:6px;
+  height:210px;
+  background:linear-gradient(to top,#00d9ff,#ee00ff);
+}
+    
+    
+    
+  </style>
+</head>
+<body>
+ 
+ <div class="clock">
+   <div class="number" style="--n:1"> <b>1</b>  </div>
+   <div class="number" style="--n:2"> <b>2</b> </div>
+   <div class="number" style="--n:3">  <b>3</b></div>
+   <div class="number" style="--n:4">  <b>4</b></div>
+   <div class="number" style="--n:5"> <b>5</b> </div>
+   <div class="number" style="--n:6"> <b>6</b> </div>
+   <div class="number" style="--n:7">  <b>7</b></div>
+   <div class="number" style="--n:8"> <b>8</b></div>
+   <div class="number" style="--n:9"> <b>9</b></div>
+   <div class="number" style="--n:10"> <b>10</b></div>
+   <div class="number" style="--n:11"> <b>11</b></div>
+   <div class="number" style="--n:12"> <b>12</b></div>
+   <div class="hour-hand" id="hour-hand"></div>
+   <div class="minute-hand" id="minute-hand"></div>
+   <div class="second-hand" id="second-hand"></div>
+   <div class="center-dot"></div>
+
+ </div> 
+  
+  
+  
+  
+
+ <script>
+   
+   
+   const secondHand = document.getElementById("second-hand");
+const minuteHand = document.getElementById("minute-hand");
+const hourHand = document.getElementById("hour-hand");
+
+function clockTick(){
+  const date = new Date();
+  const seconds = date.getSeconds() / 60;
+  const minutes = (seconds + date.getMinutes()) / 60;
+  const hours = (minutes + date.getHours()) / 12;
+  
+  rotateClockHand(secondHand, seconds);
+  rotateClockHand(minuteHand, minutes);
+  rotateClockHand(hourHand, hours);
+  
+}
+function rotateClockHand(element, rotation) {
+  element.style.setProperty("--rotate", rotation * 360);
+}
+
+setInterval(clockTick, 1000);
+   
+   
+
+
+
+
+ </script>
+</body>
+</html>
